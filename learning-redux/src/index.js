@@ -1,42 +1,31 @@
 import { createStore } from 'redux';
+const form = document.querySelector('form');
+const input = document.querySelector('input');
+const ul = document.querySelector('ul');
 
-const add = document.getElementById('add');
-const minus = document.getElementById('minus');
-const number = document.querySelector('span');
+const ADD_TODO = 'ADD_TODO';
+const DELETE_TODO = 'DELETE_TODO';
 
-const ADD = 'ADD'; //action type에서 오타에 의한 버그를 방지하기 위함.
-const MINUS = 'MINUS';
-
-const countModifier = (count = 0, action) => {
-  //countModifier: reducer
-  //count: current state
-  //count = 0 을 쓰는 이유는 current state가 undefind일 경우 0 초기화 해주기 위함이다.
-  //action: action
+const reducer = (state = [], action) => {
+  console.log(action);
   switch (action.type) {
-    case ADD:
-      return count + 1;
-    case MINUS:
-      return count - 1;
+    case ADD_TODO:
+      return [];
+    case DELETE_TODO:
+      return [];
     default:
-      return count;
+      return state;
   }
 };
 
-const onChange = () => {
-  number.innerText = countStore.getState();
+const store = createStore(reducer);
+
+const onSubmit = (e) => {
+  e.preventDefault();
+  const toDo = input.value;
+  input.value = '';
+  store.dispatch({ type: ADD_TODO, text: toDo }); //current state 배열에 추가할 text를 추가해준다.
+  //액션 객체에는 필수로 type 필드를 제외하면 나머지는 자유롭게 추가할 수 있다.
 };
 
-const countStore = createStore(countModifier); //store
-
-countStore.subscribe(onChange);
-
-const handleAdd = () => {
-  countStore.dispatch({ type: ADD });
-};
-
-const handleMinus = () => {
-  countStore.dispatch({ type: MINUS });
-};
-
-add.addEventListener('click', handleAdd);
-minus.addEventListener('click', handleMinus);
+form.addEventListener('submit', onSubmit);
