@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
-import { actionCreators } from '../store';
+import { add } from '../store';
 import ToDo from '../components/ToDo';
 
 // { toDos, addToDo }는 props의 구조분해할당
@@ -43,7 +43,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch, ownProps) {
   //action을 reducer 함수에게 보내는 역할을 가진 dispatch()를 Home 컴포넌트의 props로 보내준다.
   return {
-    addToDo: (text) => dispatch(actionCreators.addToDo(text)),
+    addToDo: (text) => dispatch(add(text)),
   };
 }
 

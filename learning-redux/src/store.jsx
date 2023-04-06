@@ -1,38 +1,18 @@
-import { createStore } from 'redux';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
 
-const ADD = 'ADD';
-const DELETE = 'DELETE';
+const toDos = createSlice({
+  name: 'toDosReducer',
+  initialState: [],
+  reducers: {
+    add: (state, action) => {
+      // mutate면 return 없이 연산만 해주면 된다.
+      state.push({ id: Date.now(), text: action.payload });
+    },
+    remove: (state, action) => {
+      return state.filter((toDo) => toDo.id !== action.payload);
+    },
+  },
+});
+export const { add, remove } = toDos.actions;
 
-const addToDo = (text) => {
-  return {
-    type: ADD,
-    text,
-  };
-};
-
-const deleteToDo = (id) => {
-  return {
-    type: DELETE,
-    id: Number(id),
-  };
-};
-
-const reducer = (state = [], action) => {
-  switch (action.type) {
-    case ADD:
-      return [{ text: action.text, id: Date.now() }, ...state];
-    case DELETE:
-      return state.filter((toDo) => toDo.id !== action.id);
-    default:
-      return state;
-  }
-};
-
-const store = createStore(reducer);
-
-export const actionCreators = {
-  addToDo,
-  deleteToDo,
-};
-
-export default store;
+export default configureStore({ reducer: toDos.reducer });
